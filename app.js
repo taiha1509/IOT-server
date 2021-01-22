@@ -1,3 +1,5 @@
+// import {getAndSave} from "./src/services/MqttService";
+var {getAndSave} = require("./src/services/MqttService");
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -64,5 +66,8 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
+getAndSave();
 
 module.exports = app;
