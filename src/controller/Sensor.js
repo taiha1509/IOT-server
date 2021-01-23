@@ -35,7 +35,7 @@ const turnOffLed = async (req, res) => {
             });
         }
 
-        return res.status(401).send({ status: 0, message: 'authorized' });
+        return res.status(401).send({ status: 0, message: 'anAuthorized' });
     }
 
 
