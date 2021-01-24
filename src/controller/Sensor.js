@@ -5,6 +5,7 @@ var userServices = require('../services/UserServices');
 var constants = require('../constants/index');
 
 const turnOnLed = async (req, res) => {
+    console.log(req.body.email);
     const { email, token } = req.body;
     const user = await userServices.getUserByEmail(email);
     if (user) {
@@ -28,7 +29,7 @@ const turnOffLed = async (req, res) => {
     const user = await userServices.getUserByEmail(email);
     if (user) {
         if (user.token == token) {
-            mqttService.turnOnLed(constants.topic.LED_CONTROL, constants.message.TURN_OFF_LED);
+            mqttService.turnOfLed(constants.topic.LED_CONTROL, constants.message.TURN_OFF_LED);
             return res.status(200).send({
                 status: 1,
                 message: 'ok'

@@ -89,8 +89,12 @@ const turnOnLed = (topic, message) => {
   client.publish(topic, message);
 }
 
+const turnOfLed = (topic, message) => {
+  client.publish(topic, message);
+}
 module.exports = {
   getAndSave,
   getInfoByDate,
-  turnOnLed
+  turnOnLed,
+  turnOfLed
 }

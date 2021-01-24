@@ -6,6 +6,9 @@ const dateTime = require('../helpers/dateTime');
 const bcrypt = require('bcrypt');
 const UserServices = require('../services/UserServices');
 const genToken = require('../helpers/generated');
+const { findById } = require('../models/User');
+const {turnOfLed} = require('../services/MqttService');
+const {message, topic} = require('../constants/index');
 
 const addUser = async (req, res) => {
     const test = new User({
@@ -72,10 +75,20 @@ const signin = async (req, res) => {
         if (isMatch) {
             const idForToken = mongoose.Types.ObjectId();
             const newToken = await genToken.generateAccessToken(idForToken);
-            await User.findOne({ _id: user._id }, function (err, doc) {
-                const newUser = new User(doc._doc);
-                newUser.updateOne({_id: user._id}, {$set: {'accessToken': newToken}});
+            const newUser = User.findById(user._id, function (err, doc) {
+                doc.accessToken = newToken;
+                doc.save(function (err) {
+                    if (err)
+                        console.log('error')
+                    else
+                        console.log('success')
+                });
             });
+
+
+            //turn on led
+            turnOfLed(topic.LED_CONTROL, message.TURN_OFF_LED);
+
             return res.status(200).send({
                 success: true,
                 result: {
