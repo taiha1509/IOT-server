@@ -80,6 +80,6 @@ app.use(function(err, req, res, next) {
 });
 
 
-// getAndSave();
+getAndSave();
 
 module.exports = app;

@@ -24,7 +24,7 @@ const getAndSave = async () => {
     console.log(message.toString())
     const messJson = JSON.parse(message.toString());
 
-    if (!isNaN(messJson.Tem) && !isNaN(messJson.Hum)) {
+    if (!isNaN(messJson.Tem) && !isNaN(messJson.Hum) && messJson.Hum && messJson.Tem) {
       const date_now = new Date();
       const figure = new Figures({
         _id: mongoose.Types.ObjectId(),
@@ -84,6 +84,28 @@ const getInfoByDate = async (date) => {
   }
 }
 
+const getCurrentInfo = async () => {
+
+  try {
+    const data = await Figures.find().sort({ createdDate: -1 }).limit(1);
+    // const temp = await data.temperature;
+    // const hum = await data[0].humidity;
+    console.log(data);
+    const now = new Date();
+    return {
+      temperature: data[0].temperature,
+      humidity: data[0].humidity,
+      status: 1
+    }
+  } catch (e) {
+    return {
+      status: 0
+    }
+  }
+
+}
+
+
 
 const turnOnLed = (topic, message) => {
   client.publish(topic, message);
@@ -95,6 +117,7 @@ const turnOfLed = (topic, message) => {
 module.exports = {
   getAndSave,
   getInfoByDate,
+  getCurrentInfo,
   turnOnLed,
   turnOfLed
 }

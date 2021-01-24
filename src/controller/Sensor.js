@@ -58,7 +58,28 @@ const getInfoByDate = async (req, res) => {
             });
         }
 
-        return res.status(401).send({ status: 0, message: 'authorized' });
+        return res.status(401).send({ status: 0, message: 'anAuthorized' });
+    }
+
+
+    return res.status(403).send({ status: 0, message: 'forbidden' });
+}
+
+const getCurrentInfo = async (req, res) => {
+    const { email, token, date } = req.body;
+    const user = await userServices.getUserByEmail(email);
+    if (user) {
+        if (user.token == token) {
+            const result = await mqttService.getCurrentInfo();
+
+            return res.status(200).send({
+                status: 1,
+                message: 'ok',
+                data: result
+            });
+        }
+
+        return res.status(401).send({ status: 0, message: 'anAuthorized' });
     }
 
 
@@ -68,5 +89,6 @@ const getInfoByDate = async (req, res) => {
 module.exports = {
     turnOnLed,
     turnOffLed,
-    getInfoByDate
+    getInfoByDate,
+    getCurrentInfo
 }
